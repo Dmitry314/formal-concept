@@ -1,5 +1,5 @@
 import numpy as np
-
+from copy import copy
 
 class FCA:
     # object and attribute names need to be converted into numerals
@@ -203,7 +203,7 @@ class Diagram:
                     purity_dict[index] = class_frequency.max() / class_frequency.sum()
 
             concept_indices_last = sorted(purity_dict.keys(), key=lambda x: purity_dict[x], reverse=True)[:num_pure]
-            concept_indices = concept_indices_last.copy()
+            concept_indices = copy(concept_indices_last)
             print(np.mean([purity_dict[index] for index in concept_indices]))
             for index in concept_indices_last:
                 concept_indices.extend(self.child_concepts[index].tolist())

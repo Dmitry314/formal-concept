@@ -3,7 +3,7 @@ import theano.tensor as T
 import theano
 from lasagne import *
 from mldm import Net
-
+import lasagne
 INITIAL_SIGMA = 0.00001
 EPSILON = 0.001
 
@@ -83,7 +83,17 @@ class DeepSparseNet(Net):
                     name='Sparse %d' % i
                 )
                 self.layers.append(sparse)
-
+        
+        '''
+        l_hid1 = lasagne.layers.DenseLayer(
+        self.layers[-1], num_units=20,
+        nonlinearity=lasagne.nonlinearities.rectify,
+        W=lasagne.init.GlorotUniform())
+        '''
+        
+        self.layers.append(l_hid1)
+        
+        
         output_l = layers.DenseLayer(
             self.layers[-1],
             num_units=num_classes,

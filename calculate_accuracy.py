@@ -4,12 +4,14 @@ from data_loader import *
 import time
 from nn_layers import DeepSparseNet, DeepDenseNet
 from lasagne import nonlinearities
-
+import networkx as nx
 result_accuracy = []
 result_f_measure = []
 result_num_epoch = []
 
 for i in range(20):
+
+    #X, y, object_labels, attribute_labels = get_zoo()[:4]
 
     X, y, object_labels, attribute_labels = get_titanic(file_name='data_sets//titanic.txt')[:4]
     # get_random(1000, 15, frequency=0.8)[:4]
@@ -19,12 +21,13 @@ for i in range(20):
     # get_seismic_bumps()[:4]
     # get_car_evaluation()[:4]
     # get_zoo()[:4]
-    y_cl = one_hot(y, n_classes=2)
+    y_cl = one_hot(y)
 
     X_train, y_train, X_val, y_val, X_test, y_test = train_test_split(X, y_cl, tp=0.6, vp=0.2)
 
+  
     fca = FCA(X_train)
-    l = fca.calculate_disjunctive_lattice(num_level=4)
+    l = fca.calculate_disjunctive_lattice(num_level=5)
     # l = fca.calculate_lattice(num_level=4)
     fca.save_lattice()
     l = fca.load_lattice()
@@ -33,7 +36,19 @@ for i in range(20):
     diag.calculate_child_concepts()
     diag.save_child_concepts()
     diag.load_child_concepts()
+    
+    
+    print(diag.child_concepts)
+    import networkx as nx
+    G=nx.Graph()
+    
+    for i in diag.child_concepts.keys():
+        for j in range(len(diag.child_concepts[i])):
+            G.add_edge(i, diag.child_concepts[i][j])
+            
+    import matplotlib.pyplot as plt
 
+    #nx.draw(G)
     # simple diagram # 3
     num_level = 3
     concept_indices = diag.select_pure(y_cl, num_level)
@@ -47,10 +62,10 @@ for i in range(20):
         print('C:\n', simple_diagram[i])
         print('W:\n', W[i])"""
 
-    # dsn = DeepSparseNet(simple_diagram, num_classes=y_train.shape[1], nonlinearity=nonlinearities.tanh, W=W)
-    ddn = DeepDenseNet(simple_diagram, num_classes=y_train.shape[1], nonlinearity=nonlinearities.tanh)
+    dsn = DeepSparseNet(simple_diagram, num_classes=y_train.shape[1], nonlinearity=nonlinearities.tanh, W=W)
+    #ddn = DeepDenseNet(simple_diagram, num_classes=y_train.shape[1], nonlinearity=nonlinearities.tanh)
 
-    for layer in ddn.layers:
+    for layer in dsn.layers:
         print('%s:' % layer.name, layer.output_shape)
 
 

@@ -4,7 +4,7 @@ import sklearn.neighbors as nn
 
 # print(sklearn.__path__)
 
-model = nn.KNeighborsClassifier(n_neighbors=1)
+model = nn.KNeighborsClassifier(n_neighbors=3)
 X, y, object_labels, attribute_labels = get_titanic()[:4]
 
 y_cl = one_hot(y, n_classes=7)

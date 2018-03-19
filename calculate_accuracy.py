@@ -25,7 +25,7 @@ for i in range(20):
 
     X_train, y_train, X_val, y_val, X_test, y_test = train_test_split(X, y_cl, tp=0.6, vp=0.2)
 
-  
+    
     fca = FCA(X_train)
     l = fca.calculate_disjunctive_lattice(num_level=5)
     # l = fca.calculate_lattice(num_level=4)

@@ -49,32 +49,44 @@ class pattern_structure:
     
     def get_full_closure(self, array_of_max_min, system):
         system2 = copy(system)
+        array_of_max_min_ = copy(array_of_max_min)
         to_close = self.check_system_is_closed(array_of_max_min, system)
+        
+        
         while(len(to_close) > 0):
             for i in range(0, len(to_close)):
                 system2.append(to_close[i])
                 
                 for j in range(0, len(self.data[0])):
                     if(data[to_close[i]][j] < array_of_max_min[j][0]):
-                        array_of_max_min[j][0] = data[to_close[i]][j]
+                        array_of_max_min_[j][0] = data[to_close[i]][j]
 
                     if(data[to_close[i]][j] > array_of_max_min[j][1]):
-                        array_of_max_min[j][1] = data[to_close[i]][j]
+                        array_of_max_min_[j][1] = data[to_close[i]][j]
             
-            to_close = self.check_system_is_closed(array_of_max_min, system2)
-               
-        return system2, array_of_max_min
+            to_close = self.check_system_is_closed(array_of_max_min_, system2)
+            
+        return system2, array_of_max_min_
     
     
     
     def build(self,  system, aray_of_max_min):
         for i in range(system[-1] + 1, len(data)):
             system2 = copy(system)
+            print("parent:", system2)
             system2.append(i)
-            system2, array_of_max_min_ = self.get_full_closure(system2, array_of_max_min)
-            if(check_canonicity(system)):
-                print(system2)
-                self.build(system, array_of_max_min_)
+            
+            for j in range(0, len(self.data[0])):
+            
+                array_of_max_min[j][0] = min(data[system2[-1]][j], array_of_max_min[j][0])
+                array_of_max_min[j][1] = max(data[system2[-1]][j], array_of_max_min[j][1])
+            print("added i: ",i, " ", system2)
+            
+            system2, array_of_max_min_ = self.get_full_closure(array_of_max_min, system2)
+            
+            if(check_canonicity(system2)):
+                print("ancestor", system2)
+                self.build(system2, array_of_max_min_)
                 
     
     
@@ -89,8 +101,8 @@ data = [[1,2],
         [5, 0],
         [-2,1]]
                
-system = [0, 1]
-array_of_max_min = [[1, 3], [3,4]]         
+system = [0]
+array_of_max_min = [[1, 1], [2, 2]]         
 
 
 ps = pattern_structure(data)

@@ -84,12 +84,12 @@ class DeepSparseNet(Net):
                 )
                 self.layers.append(sparse)
         
-        '''
+        
         l_hid1 = lasagne.layers.DenseLayer(
         self.layers[-1], num_units=20,
         nonlinearity=lasagne.nonlinearities.rectify,
         W=lasagne.init.GlorotUniform())
-        '''
+        
         
         self.layers.append(l_hid1)
         

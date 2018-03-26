@@ -10,8 +10,9 @@ from fca import FCA, Diagram
 import numpy as np
 from data_loader import *
 import time
-from nn_layers import DeepSparseNet, DeepDenseNet
-from lasagne import nonlinearities
+
+
+
 import networkx as nx
 
 from keras.models import Sequential
@@ -74,7 +75,7 @@ for i in range(0, len(concept_indices)):
         
         used_neurons.add(concept_indices[i])
 
-
+#we have to repeat this n times where n = ???
 for i in range(0, len(concept_indices)):
     if (set(diag.child_concepts[concept_indices[i]]) <= used_neurons and
         not concept_indices[i] in used_neurons):
@@ -87,8 +88,11 @@ for i in range(0, len(concept_indices)):
                 if(array_of_layers[k].number == j):
                     current.append(array_of_layers[k].layer)
         
-        array_of_layers.append( neuron(keras.layers.concatenate(copy(current)),
-                                       concept_indices[i]))
+        array_of_layers.append( neuron(keras.layers.add(copy(current)),
+                                       -1))
+        
+        array_of_layers.append(neuron(keras.layers.Dense(1, activation = 'relu')( 
+                        array_of_layers[-1].layer), concept_indices[i]))
         used_neurons.add(concept_indices[i])
                 
 

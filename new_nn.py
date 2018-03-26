@@ -120,7 +120,7 @@ for i in range(0, len(not_have_children)):
             
             last_layer.append(array_of_layers[j].layer)
 
-last_ = keras.layers.concatenate(last_layer)
+last_ = keras.layers.add(last_layer)
 outp = keras.layers.Dense(2, )(last_)
 model = Model(inputs=input1, outputs=outp)
 
@@ -149,8 +149,7 @@ current.append(array_of_layers[0].layer)
 current.append(array_of_layers[1].layer)
 
 
-t = keras.layers.concatenate(
-        
+
 a  = set()
 a.add(2)
 a.add(3)
@@ -171,7 +170,31 @@ num_level = 3
 
 
 
+def test:
+    
+    input2 = keras.layers.Input(shape=(X_train.shape[1],))
+    
+    test1 = keras.layers.Dense(2, trainable = False)(input2)
+    
+    
+    test2 = keras.layers.Dense(2, trainable = False)(input2)
+    
+    
+    test5 = keras.layers.Dense(2, trainable = False)(input2)
+    test3 = keras.layers.add([test1, test2, test5])
+    
+    test4 = keras.layers.Dense(2, trainable = False)(test3)
+    
+    
+    ml = Model(inputs = input2, output = test4)
+    ml.compile(loss='mean_squared_error', optimizer='sgd')
+    ml.fit(X_train, y_train)
+    
+    
 
+    
+    
+    
 
 
 

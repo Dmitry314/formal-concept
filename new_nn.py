@@ -56,7 +56,7 @@ for i in concept_indices:
 import keras
 from copy import copy
 
-input1 = keras.layers.Input(shape=(X_train.shape[1],))
+input1 = keras.layers.Input(shape=(X_train.shape[1],),)
 
 array_of_layers = []
 used_neurons = set()
@@ -88,11 +88,12 @@ for i in range(0, len(concept_indices)):
                 if(array_of_layers[k].number == j):
                     current.append(array_of_layers[k].layer)
         
-        array_of_layers.append( neuron(keras.layers.add(copy(current)),
-                                       -1))
+        array_of_layers.append( neuron(keras.layers.concatenate(copy(current)),
+                                      -1))
         
         array_of_layers.append(neuron(keras.layers.Dense(1, activation = 'relu')( 
                         array_of_layers[-1].layer), concept_indices[i]))
+        
         used_neurons.add(concept_indices[i])
                 
 
@@ -120,8 +121,9 @@ for i in range(0, len(not_have_children)):
             
             last_layer.append(array_of_layers[j].layer)
 
-last_ = keras.layers.add(last_layer)
-outp = keras.layers.Dense(2, )(last_)
+last_ = keras.layers.concatenate(last_layer)
+
+outp = keras.layers.Dense(2, activation = 'relu')(last_)
 model = Model(inputs=input1, outputs=outp)
 
 
@@ -136,9 +138,15 @@ model.compile(loss='mean_squared_error', optimizer='sgd')
 
 model.fit(X_train, y_train)
 z = model.predict(X_test)
+count_right = 0
 for i in range(len(z)):
-    print(z[i], " ", y_test[i])
-
+    if(z[i][0] > z[i][1] and y_test[i][0] > y_test[i][1]):
+        count_right += 1
+    if(z[i][0] < z[i][1] and y_test[i][0] < y_test[i][1]):
+        count_right += 1
+    
+print( float(count_right)/ len(z))
+    
 
 
 for i in range(0, len(concept_indices)):
@@ -167,10 +175,13 @@ len(X_train[0])
 num_level = 3
 
 
+def test2():
+    
 
 
 
-def test:
+
+def test():
     
     input2 = keras.layers.Input(shape=(X_train.shape[1],))
     
@@ -181,7 +192,7 @@ def test:
     
     
     test5 = keras.layers.Dense(2, trainable = False)(input2)
-    test3 = keras.layers.add([test1, test2, test5])
+    test3 = keras.layers.add([test1, test2, test5], trainable = True)
     
     test4 = keras.layers.Dense(2, trainable = False)(test3)
     
